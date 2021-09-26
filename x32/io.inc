@@ -22,7 +22,7 @@ write:
 	push ax
 	push edx
 	push esi
-	mov edx, VIDEO_ADDRESS
+	mov edx, [VIDEO_ADDRESS]
 	.repeat:
 		mov ah, [esi]
 		mov al, 0x0f

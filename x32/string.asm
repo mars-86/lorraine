@@ -65,7 +65,7 @@ string_reverse_32:
 	mov esi, [ebp + 4]					; mov src string to esi
 	mov [ebp - 4], esi					; copy esi initial address
 	mov [ebp - 8], edi					; 
-	
+
 	.repeat1:							; first we go to the end '\0'
 		mov ah, [esi]
 		or ah, ah
@@ -78,8 +78,8 @@ string_reverse_32:
 		mov edi, esi
 		cmp esi, [ebp - 4]				; if esi == initial address
 		je .done2
-		inc edi;
-		sub esi;
+		inc edi							;
+		dec esi							;
 		jmp .repeat2
 	.done2:
 
