@@ -51,9 +51,11 @@ opt_msg db \
 			0x0A, 0x0D, 0
 opt_sel_msg db "Option: ", 0
 opt_invalid_msg db "Invalid option", 0x0A, 0x0D, 0
+message_read_into_mem db 'Loading kernel...', 0x0A, 0x0D, 0
 message_read_into_mem_success db 'Successfully loaded.', 0x0A, 0x0D, 0
 message_read_into_mem_error db 'Error', 0x0A, 0x0D, 0
 message_halt_due_to_error db 'Halting system due to errors', 0x0A, 0x0D, 0
+new_line db 0xA, 0xD, 0
 read_into_mem_retries dw 3
 
 
@@ -65,17 +67,15 @@ mov ds, ax									; Set DS = CS
 mov si, stage2_msg
 call print_string
 
-; call_func_16 print_string_16, stage2_msg, stage2_msg_len
-
 mov si, opt_msg
 call print_string
-
-; call_func_16 print_string_16, opt_msg, opt_msg_len
 
 .select_opt:								; here we decide where to go now
 	mov si, opt_sel_msg
 	call print_string
 	call choose_option
+	mov si, new_line
+	call print_string
 	cmp al, '1'
 	je .real_mode
 	cmp al, '2'
@@ -91,17 +91,15 @@ call print_string
 
 .real_mode:
 	cli										; clear interrupts
-	xor	ax, ax								; null segments
-	mov	ds, ax
-	; mov	es, ax
-	mov	ax, 0xFE00							; stack begins at 0xFE00 - 0xffff (512 bytes)
+	mov	ax, 0xFE00							; stack begins at 0xFE00 - 0xFFFF (512 bytes)
 	mov	ss, ax
 	mov	sp, 0xFFFF
-	mov ax, 0x07e0
-	mov es, ax
-	xor bx, bx
+	mov ax, 0x07e0							; we want to load kernel at PA = 0x7e00
+	mov es, ax								; ES = 0x07e0
+	xor bx, bx								; OFF = 0x0000
+	mov cl, 0x04							; kernel's sector at floppy
 	sti
-	jmp .done
+	jmp mode_setup_done
 
 .real_mode_ext:
 	cli										; clear interrupts
@@ -142,18 +140,20 @@ call print_string
 	; call_func_16 print_string_16, p64_mode_msg, p64_mode_msg_len
 	jmp read_to_mem.error
 
-.done:
+mode_setup_done:
 
 reset_floppy:                				; Resets floppy
     xor ax, ax         						; AH = 0 = Reset floppy disk
     int 0x13
     jc reset_floppy
 
+mov si, message_read_into_mem
+call print_string
+
 read_to_mem:
 	mov ah, 0x02
 	mov al, 0x01
 	mov ch, 0x00
-	mov cl, 0x04
 	mov dh, 0x00
 	mov dl, 0x00
 	int 0x13
@@ -173,7 +173,9 @@ read_to_mem:
 mov si, message_read_into_mem_success
 call print_string
 
-jmp FAR [es:bx]								; Jump to address where we want to load the kernel
+push es
+push bx
+retf										; Far jump to address where we want to load the kernel
 
 .error:
 

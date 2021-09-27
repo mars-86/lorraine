@@ -3,12 +3,13 @@
 
 [bits 16]
 
-jmp .lib
+jmp lib
 
 ;*******************************************************
 ;	Preprocessor directives
 ;*******************************************************
 
+%include "x16/palette.inc"
 
 ;*******************************************************
 ;	Data section
@@ -16,7 +17,7 @@ jmp .lib
 
 ; video_int 0x10
 
-.lib:
+lib:
 
 ; in:
 ; AH = 0Ah
@@ -37,7 +38,7 @@ write_char_to_cursor_pos_16:
 	push cx
 	mov ah, 0x0A
 	mov bh, 0x00
-	mov bl, 0x00
+	mov bl, 0x07
 	mov cx, 0x01
 	int 0x10
 	pop cx
@@ -147,7 +148,5 @@ write_string_16:
 	pop bx
 	pop ax
 	ret
-
-%include "x16/palette.inc"
 
 %endif								; __X16_VIDEO_INC_INCLUDED__
