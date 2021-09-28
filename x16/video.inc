@@ -38,7 +38,7 @@ module:
 ; 3Fh mode 6
 ; AL = CRT controller mode byte (Phoenix 386 BIOS v1.10)
 
-set_video_mode:
+set_video_mode_16:
 	mov ah, 0x00
 	int 0x10
 	ret
@@ -53,7 +53,7 @@ set_video_mode:
 ; return:
 ; void
 
-set_cursor_shape:
+set_cursor_shape_16:
 	mov ah, 0x01
 	int 0x10
 	ret
@@ -197,7 +197,7 @@ write_char_at_cursor_pos_16:
 ; return:
 ; void
 
-set_background_border_color:
+set_background_border_color_16:
 	mov ah, 0x0B
 	mov bh, 0x00
 	int 0x10
@@ -215,7 +215,7 @@ set_background_border_color:
 ; return:
 ; void
 
-set_palette:
+set_palette_16:
 	mov ah, 0x0B
 	mov bh, 0x01
 	int 0x10
@@ -234,7 +234,7 @@ set_palette:
 ; return:
 ; void
 
-write_graphics_pixels:
+write_graphics_pixels_16:
 	mov ah, 0x0C
 	mov bh, 0x00
 	int 0x10
@@ -251,7 +251,7 @@ write_graphics_pixels:
 ; return:
 ; AL = pixel color
 
-read_graphics_pixels:
+read_graphics_pixels_16:
 	mov ah, 0x0D
 	mov bh, 0x00
 	int 0x10
@@ -268,7 +268,7 @@ read_graphics_pixels:
 ; return:
 ; void
 
-tty_output:
+tty_output_16:
 	mov ah, 0x0E
 	mov bh, 0x00
 	int 0x10
@@ -283,7 +283,7 @@ tty_output:
 ; AL = display mode (see #00010 at AH=00h)
 ; BH = active page (see AH=05h)
 
-get_current_video_mode:
+get_current_video_mode_16:
 	mov ah, 0x0F
 	int 0x10
 	ret
