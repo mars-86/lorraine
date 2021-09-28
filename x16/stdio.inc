@@ -31,7 +31,7 @@ getc_16:
 ; in:
 ; AL = ASCII character
 putc_16:
-	call write_char_to_cursor_pos_16
+	call write_char_at_cursor_pos_16
 	ret
 
 ; in:
