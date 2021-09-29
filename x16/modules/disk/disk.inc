@@ -128,4 +128,34 @@ verify_disk_sectors_16:
     int 0x13
     ret
 
+
+; get drive parameters
+; in:
+; AH = 08h
+; DL = drive (bit 7 set for hard disk)
+; ES:DI = 0000h:0000h to guard against BIOS bugs
+;
+; return:
+; CF set on error
+; AH = status (07h) (see #00234)
+; CF clear if successful
+; AH = 00h
+; AL = 00h on at least some BIOSes
+; BL = drive type (AT/PS2 floppies only) (see #00242)
+; CH = low eight bits of maximum cylinder number
+; CL = maximum sector number (bits 5-0)
+; high two bits of maximum cylinder number (bits 7-6)
+; DH = maximum head number
+; DL = number of drives
+; ES:DI -> drive parameter table (floppies only)
+
+get_drive_parameters_16:
+    xor ax, ax
+    mov es, ax
+    mov di, ax
+    mov ah, 0x08
+    int 0x13
+    ret
+
+
 %endif								; __X16_DISK_INC_INCLUDED__
