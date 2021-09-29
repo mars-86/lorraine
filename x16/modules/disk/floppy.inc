@@ -46,6 +46,4 @@ floppy_format_track_16:
     ret
 
 
-
-
 %endif								; __X16_FLOPPY_DISK_INC_INCLUDED__
