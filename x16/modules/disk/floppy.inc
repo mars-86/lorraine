@@ -6,8 +6,8 @@
 ;
 ;*******************************************************
 
-%ifndef __X16_FLOPPY_DISK_INC_INCLUDED__
-%define __X16_FLOPPY_DISK_INC_INCLUDED__
+%ifndef __X16_MODULES_FLOPPY_DISK_INC_INCLUDED__
+%define __X16_MODULES_FLOPPY_DISK_INC_INCLUDED__
 
 [bits 16]
 
@@ -89,4 +89,4 @@ floppy_set_disk_type_for_format_16:
     ret
 
 
-%endif								; __X16_FLOPPY_DISK_INC_INCLUDED__
+%endif								; __X16_MODULES_FLOPPY_DISK_INC_INCLUDED__

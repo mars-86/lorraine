@@ -6,8 +6,8 @@
 ;
 ;*******************************************************
 
-%ifndef __X16_HARD_DISK_INC_INCLUDED__
-%define __X16_HARD_DISK_INC_INCLUDED__
+%ifndef __X16_MODULES_HARD_DISK_INC_INCLUDED__
+%define __X16_MODULES_HARD_DISK_INC_INCLUDED__
 
 [bits 16]
 
@@ -240,4 +240,4 @@ hd_controller_internal_diagnostic_16:
     ret
 
 
-%endif								; __X16_HARD_DISK_INC_INCLUDED__
+%endif								; __X16_MODULES_HARD_DISK_INC_INCLUDED__

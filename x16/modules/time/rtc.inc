@@ -6,8 +6,8 @@
 ;
 ;*******************************************************
 
-%ifndef __X16_REALTIME_CLOCK_INC_INCLUDED__
-%define __X16_REALTIME_CLOCK_INC_INCLUDED__
+%ifndef __X16_MODULES_REALTIME_CLOCK_INC_INCLUDED__
+%define __X16_MODULES_REALTIME_CLOCK_INC_INCLUDED__
 
 [bits 16]
 
@@ -99,4 +99,4 @@ set_realtime_clock_date_16:
     ret
 
 
-%endif								; __X16_REALTIME_CLOCK_INC_INCLUDED__
+%endif								; __X16_MODULES_REALTIME_CLOCK_INC_INCLUDED__

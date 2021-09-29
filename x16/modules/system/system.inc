@@ -6,12 +6,12 @@
 ;
 ;*******************************************************
 
-%ifndef __X16_SYSTEM_INC_INCLUDED__
-%define __X16_SYSTEM_INC_INCLUDED__
+%ifndef __X16_MODULES_SYSTEM_INC_INCLUDED__
+%define __X16_MODULES_SYSTEM_INC_INCLUDED__
 
 [bits 16]
 
-jmp module
+jmp system_module
 
 ;*******************************************************
 ;	Preprocessor directives
@@ -24,7 +24,7 @@ jmp module
 
 ; system_int 0x12
 
-module:
+system_module:
 
 ; get memory size
 ; in:
@@ -36,4 +36,4 @@ get_memory_size_16:
     ret
 
 
-%endif								; __X16_SYSTEM_INC_INCLUDED__
+%endif								; __X16_MODULES_SYSTEM_INC_INCLUDED__

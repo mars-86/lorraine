@@ -9,8 +9,8 @@ jmp stdio_lib
 ;	Preprocessor directives
 ;*******************************************************
 
-%include "x16/keyboard.inc"
-%include "x16/video.inc"
+%include "x16/modules/keyboard/keyboard.inc"
+%include "x16/modules/video/video.inc"
 
 ;*******************************************************
 ;	Data section

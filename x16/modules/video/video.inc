@@ -6,8 +6,8 @@
 ;
 ;*******************************************************
 
-%ifndef __X16_VIDEO_INC_INCLUDED__
-%define __X16_VIDEO_INC_INCLUDED__
+%ifndef __X16_MODULES_VIDEO_INC_INCLUDED__
+%define __X16_MODULES_VIDEO_INC_INCLUDED__
 
 [bits 16]
 
@@ -320,4 +320,4 @@ write_string_16:
 	ret
 
 
-%endif								; __X16_VIDEO_INC_INCLUDED__
+%endif								; __X16_MODULES_VIDEO_INC_INCLUDED__

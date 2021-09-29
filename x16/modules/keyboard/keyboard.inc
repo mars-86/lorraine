@@ -6,8 +6,8 @@
 ;
 ;*******************************************************
 
-%ifndef __X16_KEYBOARD_INC_INCLUDED__
-%define __X16_KEYBOARD_INC_INCLUDED__
+%ifndef __X16_MODULES_KEYBOARD_INC_INCLUDED__
+%define __X16_MODULES_KEYBOARD_INC_INCLUDED__
 
 [bits 16]
 
@@ -186,4 +186,4 @@ get_extended_shift_states_16:
 	ret
 
 
-%endif								; __X16_KEYBOARD_INC_INCLUDED__
+%endif								; __X16_MODULES_KEYBOARD_INC_INCLUDED__
