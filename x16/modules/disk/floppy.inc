@@ -11,7 +11,7 @@
 
 [bits 16]
 
-jmp module
+jmp floppy_module
 
 ;*******************************************************
 ;	Preprocessor directives
@@ -24,7 +24,7 @@ jmp module
 
 ; disk_int 0x13
 
-module:
+floppy_module:
 
 ; format track
 ; in:
@@ -42,6 +42,49 @@ module:
 
 floppy_format_track_16:
     mov ah, 0x05
+    int 0x13
+    ret
+
+
+; detect disk change
+; in:
+; AH = 16h
+; DL = drive number (00h-7Fh)
+; SI = 0000h (to avoid crash on AT&T 6300)
+;
+; return:
+; CF clear if change line inactive
+; AH = 00h (disk not changed)
+; CF set if change line active
+; AH = status
+; 01h invalid command (SyQuest)
+; 06h change line active or not supported
+; 80h drive not ready or not present
+
+floppy_detect_disk_change_16:
+    xor si, si
+    mov ah, 0x16
+    int 0x13
+    ret
+
+
+; set disk type for format (at, ps)
+; in:
+; AH = 17h
+; AL = format type
+; 01h = 320/360K disk in 360K drive
+; 02h = 320/360K disk in 1.2M drive
+; 03h = 1.2M disk in 1.2M drive
+; 04h = 720K disk in 720K or 1.44M drive
+; DL = drive number
+;
+; return:
+; CF set on error
+; CF clear if successful
+; AH = status (see #00234 at AH=01h)
+
+floppy_set_disk_type_for_format_16:
+    mov ah, 0x17
     int 0x13
     ret
 

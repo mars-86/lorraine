@@ -11,7 +11,7 @@
 
 [bits 16]
 
-jmp module
+jmp hd_module
 
 ;*******************************************************
 ;	Preprocessor directives
@@ -24,7 +24,7 @@ jmp module
 
 ; disk_int 0x13
 
-module:
+hd_module:
 
 ; initialize controller with drive parameters
 ; in:
@@ -36,7 +36,7 @@ module:
 ; CF set on error
 ; AH = status (see #00234)
 
-init_controller_with_drive_params_16:
+hd_init_controller_with_drive_params_16:
     mov ah, 0x09
     int 0x13
     ret
@@ -59,7 +59,7 @@ init_controller_with_drive_params_16:
 ; AH = status (see #00234)
 ; AL = number of sectors transferred
 
-read_long_sectors_16:
+hd_read_long_sectors_16:
     mov ah, 0x0A
     int 0x13
     ret
@@ -82,7 +82,7 @@ read_long_sectors_16:
 ; AH = status (see #00234)
 ; AL = number of sectors transferred
 
-write_long_sectors_16:
+hd_write_long_sectors_16:
     mov ah, 0x0B
     int 0x13
     ret
@@ -102,7 +102,7 @@ write_long_sectors_16:
 ; CF clear if successful
 ; AH = status (see #00234)
 
-seek_to_cylinder_16:
+hd_seek_to_cylinder_16:
     mov ah, 0x0C
     int 0x13
     ret
@@ -118,7 +118,7 @@ seek_to_cylinder_16:
 ; CF clear if successful
 ; AH = status (see #00234)
 
-reset_hard_disk_16:
+hd_reset_hard_disk_16:
     mov ah, 0x0D
     int 0x13
     ret
@@ -135,7 +135,7 @@ reset_hard_disk_16:
 ; CF clear if successful
 ; AH = status code (see #00234)
 
-read_sector_buffer_16:
+hd_read_sector_buffer_16:
     mov ah, 0x0E
     int 0x13
     ret
@@ -152,7 +152,7 @@ read_sector_buffer_16:
 ; CF clear if successful
 ; AH = status code (see #00234)
 
-write_sector_buffer_16:
+hd_write_sector_buffer_16:
     mov ah, 0x0F
     int 0x13
     ret
@@ -168,7 +168,7 @@ write_sector_buffer_16:
 ; CF clear if successful
 ; AH = status (see #00234 at AH=01h)
 
-check_if_drive_ready_16:
+hd_check_if_drive_ready_16:
     mov ah, 0x10
     int 0x13
     ret
@@ -184,7 +184,7 @@ check_if_drive_ready_16:
 ; CF clear if successful
 ; AH = status (see #00234 at AH=01h)
 
-recalibrate_drive_16:
+hd_recalibrate_drive_16:
     mov ah, 0x11
     int 0x13
     ret
@@ -201,7 +201,7 @@ recalibrate_drive_16:
 ; AH = status code (see #00234 at AH=01h)
 ; AL = 00h
 
-controller_ram_diagnostic_16:
+hd_controller_ram_diagnostic_16:
     mov ah, 0x12
     int 0x13
     ret
@@ -218,7 +218,7 @@ controller_ram_diagnostic_16:
 ; AH = status code (see #00234 at AH=01h)
 ; AL = 00h
 
-drive_diagnostic_16:
+hd_drive_diagnostic_16:
     mov ah, 0x13
     int 0x13
     ret
@@ -234,7 +234,7 @@ drive_diagnostic_16:
 ; AH = status code (see #00234 at AH=01h)
 ; AL = 00h
 
-controller_internal_diagnostic_16:
+hd_controller_internal_diagnostic_16:
     mov ah, 0x14
     int 0x13
     ret

@@ -3,7 +3,7 @@
 
 [bits 16]
 
-jmp .lib
+jmp stdio_lib
 
 ;*******************************************************
 ;	Preprocessor directives
@@ -19,13 +19,13 @@ jmp .lib
 new_line db 0xA, 0xD, 0
 new_line_len equ $ - new_line
 
-.lib:
+stdio_lib:
 
 ; return:
 ; AH = BIOS scan code
 ; AL = ASCII character
 getc_16:
-	call get_key_16
+	call get_keystroke_16
 	ret
 
 ; in:
@@ -64,5 +64,6 @@ print_string_16:
 	pop cx
 	pop bp
 	ret
+
 
 %endif								; __X16_STDIO_INC_INCLUDED__

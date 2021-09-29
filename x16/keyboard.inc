@@ -11,7 +11,7 @@
 
 [bits 16]
 
-jmp module
+jmp keyboard_module
 
 ;*******************************************************
 ;	Preprocessor directives
@@ -24,7 +24,7 @@ jmp module
 
 ; keyboard_int 0x16
 
-module:
+keyboard_module:
 
 ; get keystroke
 ; in:

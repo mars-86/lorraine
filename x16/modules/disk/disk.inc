@@ -11,7 +11,7 @@
 
 [bits 16]
 
-jmp module
+jmp disk_module
 
 ;*******************************************************
 ;	Preprocessor directives
@@ -24,7 +24,7 @@ jmp module
 
 ; disk_int 0x13
 
-module:
+disk_module:
 
 ; reset disk system
 ; in:
@@ -154,6 +154,53 @@ get_drive_parameters_16:
     mov es, ax
     mov di, ax
     mov ah, 0x08
+    int 0x13
+    ret
+
+
+; get disk type
+; in:
+; AH = 15h
+; DL = drive number (bit 7 set for hard disk)
+; (AL = FFh, CX = FFFFh, see Note)
+;
+; return:
+; CF clear if successful
+; AH = type code
+; 00h no such drive
+; (SpeedStor) AL = 03h hard disk
+; CX:DX = number of 512-byte sectors
+; 01h floppy without change-line support
+; 02h floppy (or other removable drive) with change-line support
+; 03h hard disk
+; CX:DX = number of 512-byte sectors
+; CF set on error
+; AH = status (see #00234 at AH=01h)
+
+get_disk_type_16:
+    mov ah, 0x15
+    int 0x13
+    ret
+
+
+; set media type for format
+; in:
+; AH = 18h
+; DL = drive number
+; CH = lower 8 bits of highest cylinder number (number of cylinders - 1)
+; CL = sectors per track (bits 0-5)
+; top 2 bits of highest cylinder number (bits 6,7)
+;
+; return:
+; AH = status
+; 00h requested combination supported
+; 01h function not available
+; 0Ch not supported or drive type unknown
+; 80h there is no disk in the drive
+; ES:DI -> 11-byte parameter table (see #01264 at INT 1E)
+
+set_media_type_for_format_16:
+    mov ah, 0x18
     int 0x13
     ret
 
