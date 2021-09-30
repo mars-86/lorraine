@@ -26,6 +26,16 @@ jmp system_module
 
 system_module:
 
+; get equipment list
+; in:
+; Return:
+; (E)AX = BIOS equipment list word (see #00226,#03215 at INT 4B"Tandy")
+
+get_equipment_list_16:
+    int 0x11
+    ret
+
+
 ; get memory size
 ; in:
 ; return:
@@ -33,6 +43,44 @@ system_module:
 
 get_memory_size_16:
     int 0x12
+    ret
+
+
+; set event wait interval
+; in:
+; AH = 83h
+; AL = subfunction
+; 00h set interval
+; CX:DX = microseconds to delay
+; ES:BX -> byte whose high bit is to be set at end of interval
+; 01h cancel wait interval
+;
+; return:
+; CF set on error or function already busy
+; AH = status
+; 80h invalid command (PC,PCjr)
+; 86h function not supported (XT and later)
+; CF clear if successful
+
+set_event_wait_interval_16:
+    mov ah, 0x83
+    int 0x15
+    ret
+
+
+; wait (at, ps)
+; in:
+; AH = 86h
+; CX:DX = interval in microseconds
+;
+; return:
+; CF clear if successful (wait interval elapsed)
+; CF set on error or AH=83h wait already in progress
+; AH = status (see #00496)
+
+wait_16:
+    mov ah, 0x86
+    int 0x15
     ret
 
 
