@@ -11,4 +11,4 @@
 %include "x16/modules/video/video.inc"
 
 
-%endif                              ; %ifndef __X16_MODULES_INC_INCLUDED__
+%endif                              ; %endif __X16_MODULES_INC_INCLUDED__
