@@ -11,7 +11,7 @@
 
 [bits 16]
 
-jmp video_module
+video_module:
 
 ;*******************************************************
 ;	Preprocessor directives
@@ -23,8 +23,6 @@ jmp video_module
 ;*******************************************************
 
 ; video_int 0x10
-
-video_module:
 
 ; set video mode
 ; in:

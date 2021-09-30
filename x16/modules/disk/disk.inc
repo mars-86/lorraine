@@ -11,20 +11,20 @@
 
 [bits 16]
 
-jmp disk_module
+disk_module:
 
 ;*******************************************************
 ;	Preprocessor directives
 ;*******************************************************
 
+%include "x16/modules/floppy.inc"
+%include "x16/modules/hard_disk.inc"
 
 ;*******************************************************
 ;	Data section
 ;*******************************************************
 
 ; disk_int 0x13
-
-disk_module:
 
 ; reset disk system
 ; in:

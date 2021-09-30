@@ -11,7 +11,7 @@
 
 [bits 16]
 
-jmp hd_module
+hd_module:
 
 ;*******************************************************
 ;	Preprocessor directives
@@ -23,8 +23,6 @@ jmp hd_module
 ;*******************************************************
 
 ; disk_int 0x13
-
-hd_module:
 
 ; initialize controller with drive parameters
 ; in:

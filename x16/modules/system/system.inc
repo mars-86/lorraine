@@ -11,7 +11,7 @@
 
 [bits 16]
 
-jmp system_module
+system_module:
 
 ;*******************************************************
 ;	Preprocessor directives
@@ -23,8 +23,6 @@ jmp system_module
 ;*******************************************************
 
 ; system_int 0x12
-
-system_module:
 
 ; get equipment list
 ; in:
