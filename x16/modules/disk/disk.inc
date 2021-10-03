@@ -17,8 +17,8 @@ disk_module:
 ;	Preprocessor directives
 ;*******************************************************
 
-%include "x16/modules/floppy.inc"
-%include "x16/modules/hard_disk.inc"
+%include "x16/modules/disk/floppy.inc"
+%include "x16/modules/disk/hard_disk.inc"
 
 ;*******************************************************
 ;	Data section

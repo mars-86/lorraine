@@ -17,7 +17,7 @@ time_module:
 ;	Preprocessor directives
 ;*******************************************************
 
-%include "x16/modules/rtc.inc"
+%include "x16/modules/time/rtc.inc"
 
 ;*******************************************************
 ;	Data section

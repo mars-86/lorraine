@@ -3,7 +3,6 @@
 
 jmp stage2
 
-
 print_string:
 	push ax
 	push si
@@ -29,6 +28,29 @@ choose_option:
 	mov cx, 0x01
 	int 0x10
 	ret
+
+reset_floppy:                				; Resets floppy
+    xor ax, ax         						; AH = 0 = Reset floppy disk
+    int 0x13
+    jc reset_floppy
+	ret
+
+read_into_mem_retries dw 3
+
+read_to_mem:
+	mov ah, 0x02
+	int 0x13
+	ret
+	call print_string
+	push bx
+	mov bx, [read_into_mem_retries]
+	dec bx
+	or bx, bx
+	jmp stage2_error
+	mov [read_into_mem_retries], bx
+	pop bx
+	jmp read_to_mem
+
 
 ;*******************************************************
 ;	Preprocessor directives
@@ -56,7 +78,6 @@ message_read_into_mem_success db 'Successfully loaded.', 0x0A, 0x0D, 0
 message_read_into_mem_error db 'Error', 0x0A, 0x0D, 0
 message_halt_due_to_error db 'Halting system due to errors', 0x0A, 0x0D, 0
 new_line db 0xA, 0xD, 0
-read_into_mem_retries dw 3
 
 
 stage2:
@@ -69,6 +90,7 @@ call print_string
 
 mov si, opt_msg
 call print_string
+
 
 .select_opt:								; here we decide where to go now
 	mov si, opt_sel_msg
@@ -97,7 +119,10 @@ call print_string
 	mov ax, 0x07e0							; we want to load kernel at PA = 0x7e00
 	mov es, ax								; ES = 0x07e0
 	xor bx, bx								; OFF = 0x0000
-	mov cl, 0x04							; kernel's sector at floppy
+											; set up reads
+	push 0x0000								; head and drive number (dh = 0x00, dl = 0x00)
+	push 0x0004								; kernel's sector at floppy (ch = 0x00, cl = 0x04)
+	push 0x0001								; set up ax (ah = 0x00, al = 0x01)
 	sti
 	jmp mode_setup_done
 
@@ -110,7 +135,7 @@ call print_string
 	; mov	ss, ax
 	; mov	sp, 0xFFFF
 	sti
-	jmp read_to_mem.error
+	jmp stage2_error
 
 .prot_mode_32:
 	cli										; clear interrupts
@@ -134,41 +159,24 @@ call print_string
 
 	; jmp 0x8:enter_pm						; far jmp to 32 bits area, that way the cpu will clear the pipeline
 
-	jmp read_to_mem.error
+	jmp stage2_error
 
 .prot_mode_64:
 	; call_func_16 print_string_16, p64_mode_msg, p64_mode_msg_len
-	jmp read_to_mem.error
+	jmp stage2_error
 
 mode_setup_done:
 
-reset_floppy:                				; Resets floppy
-    xor ax, ax         						; AH = 0 = Reset floppy disk
-    int 0x13
-    jc reset_floppy
+call reset_floppy
 
 mov si, message_read_into_mem
 call print_string
 
-read_to_mem:
-	mov ah, 0x02
-	mov al, 0x01
-	mov ch, 0x00
-	mov dh, 0x00
-	mov dl, 0x00
-	int 0x13
-	jnc .read_done
-	call print_string
-	push bx
-	mov bx, [read_into_mem_retries]
-	dec bx
-	or bx, bx
-	jz .error
-	mov [read_into_mem_retries], bx
-	pop bx
-	jmp read_to_mem
+pop ax
+pop cx
+pop dx
 
-.read_done:
+call read_to_mem
 
 mov si, message_read_into_mem_success
 call print_string
@@ -177,7 +185,7 @@ push es
 push bx
 retf										; Far jump to address where we want to load the kernel
 
-.error:
+stage2_error:
 
 mov si, message_halt_due_to_error
 call print_string
@@ -207,33 +215,3 @@ times 1024 - ($ - $$) db 0
 ; %include "x32/main32.asm"
 
 ; welcome_to_protected_mode db "Welcome to protected mode!", 0x0A, 0x0D, 0
-
-    ; Set to graphics mode 0x13 (320x200x256)
-    ; mov ax, 13h
-    ; int 10h
-
-    ; Set ES to the VGA video segment at 0xA000
-    ; mov ax, 0xa000
-    ; mov es, ax
-
-; vga:
-    ; Draw pixel in middle of screen
-    ; mov ax, [ycoord]
-    ; mov bx, [xcoord]
-    ; mov cx, 320
-    ; mul cx
-    ; add ax, bx
-    ; mov di, ax
-    ; mov dl, [color]
-    ; mov [es:di],dl
-
-    ; Put processor in an endless loop
-    ; cli
-; .endloop:
-    ; hlt
-    ; jmp .endloop
-
-; Put Data after the code
-; xcoord DW 160
-; ycoord DW 100
-; color  DB 0x0D    ; One of the magenta shades in VGA palette
