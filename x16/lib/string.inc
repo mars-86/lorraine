@@ -25,4 +25,30 @@ string_length_16:
 	ret
 
 
+; args:
+; STACK = dest string
+; STACK = src string
+;
+; return
+; DI = new string
+
+string_concat_16:
+	push bp
+	push si
+	mov sp, bp
+	mov di, [bp + 4]					; move 
+	push di
+	.repeat_1:
+		cmp di, 0
+		je .done1
+		inc di
+		jmp .repeat_1
+	.done1:
+	mov di, [bp + 2]
+	pop di
+	pop si
+	pop bp
+	ret
+
+
 %endif									; __X16_STRING_INC_INCLUDED__
