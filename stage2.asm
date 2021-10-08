@@ -57,6 +57,7 @@ read_to_mem:
 ;*******************************************************
 
 %include "x16/gdt.asm"
+%include "x16/lib/string.inc"
 
 ;*******************************************************
 ;	Data section
@@ -73,17 +74,29 @@ opt_msg db \
 			0x0A, 0x0D, 0
 opt_sel_msg db "Option: ", 0
 opt_invalid_msg db "Invalid option", 0x0A, 0x0D, 0
+opt_invalid_msg_len equ $ - opt_invalid_msg
 message_read_into_mem db 'Loading kernel...', 0x0A, 0x0D, 0
 message_read_into_mem_success db 'Successfully loaded.', 0x0A, 0x0D, 0
 message_read_into_mem_error db 'Error', 0x0A, 0x0D, 0
 message_halt_due_to_error db 'Halting system due to errors', 0x0A, 0x0D, 0
 new_line db 0xA, 0xD, 0
 
-
 stage2:
 
 mov ax, cs
 mov ds, ax									; Set DS = CS
+
+push stage2_msg
+push opt_invalid_msg
+push opt_invalid_msg_len
+call string_concat_16
+add sp, 6
+
+mov si, stage2_msg
+call print_string
+
+cli
+hlt
 
 mov si, stage2_msg
 call print_string
@@ -215,3 +228,6 @@ times 1024 - ($ - $$) db 0
 ; %include "x32/main32.asm"
 
 ; welcome_to_protected_mode db "Welcome to protected mode!", 0x0A, 0x0D, 0
+
+section .bss
+new_string_copy resb 50

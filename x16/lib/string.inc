@@ -1,6 +1,8 @@
 %ifndef __X16_STRING_INC_INCLUDED__
 %define __X16_STRING_INC_INCLUDED__
 
+[bits 16]
+
 ; args:
 ; STACK = string
 ;
@@ -8,74 +10,78 @@
 ; AX = length
 
 string_length_16:
-	push bp
 	push si
+	push bp
 	mov bp, sp
-	mov si, [bp + 2]
+	mov si, [bp + 6]
 	xor ax, ax
 	.repeat:
-		cmp [si], 0
+		cmp BYTE [si], 0
 		je .done
 		inc ax
 		inc si
-		jmp .repeat
+ 		jmp .repeat
 	.done:
-	pop si
 	pop bp
+	pop si
 	ret
 
 
 ; args:
 ; STACK = dest
 ; STACK = src
+; STACK = length
 ;
 ; return
-; DI = new string
+; AX = copied string address
 
 string_concat_16:
-	push bp
 	push si
-	mov bp, sp
-	mov di, [bp + 4]					; move 
 	push di
-	.repeat_1:
-		cmp [di], 0
-		je .done1
+	push bp
+	mov bp, sp
+	cld									; clear direction flag
+	mov cx, [bp + 08]					; length
+	mov si, [bp + 10]					; src
+	mov di, [bp + 12]					; dest
+	push di								; save dest's address
+	.repeat:
+		mov al, [di]
+		xor al, al
+		jz .done
 		inc di
-		jmp .repeat_1
-	.done1:
-	mov di, [bp + 2]
+		jmp .repeat
+	.done:
+	rep movsb
+	pop ax								; dest start address
+	pop bp
 	pop di
 	pop si
-	pop bp
 	ret
 
 
 ; args:
 ; STACK = dest
 ; STACK = src
+; STACK = length
 ;
 ; return
-; DI = copied string
+; AX = copied string address
 
 string_copy_16:
-	push bp
-	mov bp, sp
 	push si
 	push di
-	mov si, [bp + 2]
-	.repeat:
-		mov ah, [si]
-		mov [di], ah
-		cmp [si], 0
-		je .done
-		inc si
-		inc di
-		jmp .repeat
-	.done:
+	push bp
+	mov bp, sp
+	cld									; clear direction flag
+	mov cx, [bp + 08]					; length
+	mov si, [bp + 10]					; src
+	mov di, [bp + 12]					; dest
+	mov ax, di							; save dest's address
+	rep movsb
+	pop bp
 	pop di
 	pop si
-	pop bp
 	ret
 
 
