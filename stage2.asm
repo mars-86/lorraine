@@ -86,18 +86,6 @@ stage2:
 mov ax, cs
 mov ds, ax									; Set DS = CS
 
-push stage2_msg
-push opt_invalid_msg
-push opt_invalid_msg_len
-call string_concat_16
-add sp, 6
-
-mov si, stage2_msg
-call print_string
-
-cli
-hlt
-
 mov si, stage2_msg
 call print_string
 
@@ -231,3 +219,4 @@ times 1024 - ($ - $$) db 0
 
 section .bss
 new_string_copy resb 50
+str_concats resb 50

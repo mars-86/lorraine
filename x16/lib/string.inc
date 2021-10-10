@@ -47,7 +47,7 @@ string_concat_16:
 	push di								; save dest's address
 	.repeat:
 		mov al, [di]
-		xor al, al
+		or al, al
 		jz .done
 		inc di
 		jmp .repeat
