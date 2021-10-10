@@ -11,7 +11,7 @@
 
 [bits 16]
 
-jmp floppy_module
+floppy_module:
 
 ;*******************************************************
 ;	Preprocessor directives
@@ -23,8 +23,6 @@ jmp floppy_module
 ;*******************************************************
 
 ; disk_int 0x13
-
-floppy_module:
 
 ; format track
 ; in:

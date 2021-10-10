@@ -11,7 +11,7 @@
 
 [bits 16]
 
-jmp rtc_module
+rtc_module:
 
 ;*******************************************************
 ;	Preprocessor directives
@@ -23,8 +23,6 @@ jmp rtc_module
 ;*******************************************************
 
 ; time_int 0x1A
-
-rtc_module:
 
 ; get real-time clock time
 ; in:

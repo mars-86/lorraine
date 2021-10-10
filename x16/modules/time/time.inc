@@ -11,20 +11,19 @@
 
 [bits 16]
 
-jmp time_module
+time_module:
 
 ;*******************************************************
 ;	Preprocessor directives
 ;*******************************************************
 
+%include "x16/modules/time/rtc.inc"
 
 ;*******************************************************
 ;	Data section
 ;*******************************************************
 
 ; time_int 0x1A
-
-time_module:
 
 ; get system time
 ; in:
